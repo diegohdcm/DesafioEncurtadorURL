@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+</h:head>
+<h:body>
+	<p:panel header="Encurta URL">
+		<h:form id="form1">
+			<p:panelGrid columns="2">
+				<h:outputText value="URL"></h:outputText>
+				<p:inputText value="#{mb.urldig}" size="70" required="true"></p:inputText>
+				<p:commandButton value="Encurta URL" action="#{mb.encurtar}"
+					update=":form1, :form4" ajax="true"></p:commandButton>
+				<p:growl></p:growl>
+			</p:panelGrid>
+		</h:form>
+	</p:panel>
+	<p:panel header="Resultado">
+		<h:form id="form4">
+			<p:dataTable id="tabela1" value="#{mb.encurtadorURL}" var="linha2">
+				<p:column headerText="Original">
+					<h:outputText value="#{linha2.url}" />
+				</p:column>
+				<p:column headerText="URL Encurtada">
+					<h:outputText value="#{mb.encurtadorURL.urlEncurtada}" />
+				</p:column>
+				<p:column>
+					<p:commandButton value="Gravar" action="#{mb.gravar}"
+						update=":form1, :form2" ajax="true"></p:commandButton>
+				</p:column>
+				<p:growl></p:growl>
+			</p:dataTable>
+		</h:form>
+	</p:panel>
+	<hr />
+	<p:panel header="Consulta dos Dados">
+		<h:form id="form2">
+			<p:dataTable id="tabela1" value="#{mb.encurtadorURLs}" var="linha">
+				<p:column headerText="IdURL">
+					<h:outputText value="#{linha.urlId}" />
+				</p:column>
+				<p:column headerText="URL">
+					<h:outputText value="#{linha.url}" />
+				</p:column>
+				<p:column headerText="URL Encurtada">
+					<h:outputText value="#{linha.urlEncurtada}" />
+				</p:column>
+				<p:column headerText="Excluir">
+					<p:commandButton value="Excluir" action="#{mb.excluir}" ajax="true"
+						update=":form2">
+						<f:setPropertyActionListener value="#{linha}"
+							target="#{mb.encurtadorURL}">
+						</f:setPropertyActionListener>
+					</p:commandButton>
+				</p:column>
+				<p:column headerText="Alterar">
+					<p:commandButton value="Alterar" ajax="true" update=":form3"
+						onclick="PF('dialog1').show();">
+						<f:setPropertyActionListener value="#{linha}"
+							target="#{mb.encurtadorURL}">
+						</f:setPropertyActionListener>
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+			<p:messages></p:messages>
+		</h:form>
+	</p:panel>
+	<p:dialog header="Effects" widgetVar="dialog1" showEffect="explode"
+		hideEffect="bounce" modal="true" height="160" width="770">
+		<h:form id="form3">
+			<h:inputHidden value="#{mb.encurtadorURL.urlId}" />
+			<p:panelGrid columns="2">
+				<h:outputText value="URL: " />
+				<p:inputText value="#{mb.encurtadorURL.url}" size="60" />
+				<p:commandButton value="Alterar" action="#{mb.alterar}" ajax="true"
+					update=":form1, :form2, :form3" onclick="PF('dialog1').hide();"></p:commandButton>
+			</p:panelGrid>
+			<p:messages></p:messages>
+		</h:form>
+	</p:dialog>
+</h:body>
+</html>
